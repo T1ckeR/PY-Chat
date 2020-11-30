@@ -4,6 +4,7 @@ import socket
 import select  
 import sys  
 from threading import *
+import _thread
   
 """The first argument AF_INET is the address domain of the  
 socket. This is used when we have an Internet Domain with  
@@ -33,7 +34,7 @@ server.bind((IP_address, Port))
   
 """  
 listens for 100 active connections. This number can be  
-increased as per convenience.  
+increased as per convenience.
 """
 server.listen(100)  
   
@@ -41,8 +42,10 @@ list_of_clients = []
   
 def clientthread(conn, addr):  
   
-    # sends a message to the client whose user object is conn  
-    conn.send("Welcome to this chatroom!")  
+    # sends a message to the client whose user object is conn 
+    Message = 'Welcome to this chatroom'
+    byte = Message.encode() 
+    conn.send(byte)  
   
     while True:  
             try:  
@@ -104,7 +107,7 @@ while True:
   
     # creates and individual thread for every user  
     # that connects  
-    thread.start_new_thread(clientthread,(conn,addr))    
+    _thread.start_new_thread(clientthread,(conn,addr))    
   
 conn.close()
 server.close()
